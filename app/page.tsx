@@ -1,4 +1,24 @@
+import { query } from "@/apollo-client";
 import Image from "next/image";
+import { gql } from '@apollo/client';
+
+const userQuery = gql`
+query {
+  transfers(limit: 10, offset: 10, orderBy: id_ASC) {
+    from
+    block
+    id
+    to
+    value
+    txHash
+  }
+}
+
+`;
+
+const { data } = await query({ query: userQuery });
+
+console.log(data);
 
 export default function Home() {
   return (
