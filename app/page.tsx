@@ -13,10 +13,11 @@ import Link from "next/link";
 import { Info } from "lucide-react";
 import HyperText from "@/components/ui/hyper-text";
 import { ArrowUpRight } from "lucide-react";
+import { RewardsChart } from "@/components/RewardsChart";
 
 const userQuery = gql`
 query {
-  transfers(limit: 50, orderBy: block_ASC) {
+  transfers(limit: 500, orderBy: block_DESC) {
     from
     block
     id
@@ -44,6 +45,7 @@ export default function Home() {
     <div className="min-h-screen p-8 bg-zinc-950">
       <div className="max-w-[1200px] mx-auto space-y-6">
         {/* Stats Cards Row */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
@@ -81,7 +83,7 @@ export default function Home() {
           <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
-                Total Transfers
+                Total Indexed Transfers
                 <Info className="w-4 h-4" />
               </CardDescription>
               <div className="mt-2">
@@ -93,6 +95,8 @@ export default function Home() {
             </CardHeader>
           </Card>
         </div>
+        <RewardsChart rewardHistory={data?.transfers} />
+
 
         {/* Main Table Card */}
         <Card className="bg-zinc-900 border-0">
@@ -103,7 +107,7 @@ export default function Home() {
             <Table >
               <TableHeader>
                 <TableRow className="border-zinc-800 hover:bg-transparent">
-                  <TableHead className="text-zinc-400 text-xs font-semibold uppercase">Borrower</TableHead>
+                  <TableHead className="text-zinc-400 text-xs font-semibold uppercase">Sender</TableHead>
                   <TableHead className="text-zinc-400 text-xs font-semibold uppercase">Network</TableHead>
                   <TableHead className="text-zinc-400 text-xs font-semibold uppercase">Value</TableHead>
                   <TableHead className="text-zinc-400 text-xs font-semibold uppercase">Block</TableHead>

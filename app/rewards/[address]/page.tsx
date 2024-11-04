@@ -11,6 +11,8 @@ import {
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import HyperText from "@/components/ui/hyper-text";
 import { ArrowUpRight } from "lucide-react";
+import { Info } from "lucide-react";
+import { RewardsChart } from "@/components/RewardsChart";
 
 const formatCPOOLValue = (value: string) => {
     const num = Number(value) / 1e18;
@@ -83,17 +85,20 @@ export default async function UserRewardsPage({ params }: PageProps) {
             <div className="max-w-[1200px] mx-auto space-y-6">
                 {/* Title Card */}
                 <Card className="bg-zinc-900 border-0">
-                    <CardHeader>
+                    <CardHeader >
                         <h1 className="text-3xl font-bold text-white">
                             Reward History
                         </h1>
+                        </CardHeader>
+                        <div className="flex items-center px-6 py-2 gap-4">
                         <img
                             src={`https://effigy.im/a/${params.address}.svg`}
                             alt="Avatar"
                             className="w-16 h-16 rounded-full"
                           />
                         <CardDescription className="font-mono text-2xl text-zinc-400">{params.address}</CardDescription>
-                    </CardHeader>
+
+                        </div>
                 </Card>
 
                 {/* Stats Cards */}
@@ -125,18 +130,26 @@ export default async function UserRewardsPage({ params }: PageProps) {
 
                     <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
                         <CardHeader>
-                            <CardDescription className="text-zinc-400 text-sm font-medium">
-                                Last Updated
+                            <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
+                                Last Block Update
+                                <Info className="w-4 h-4 text-zinc-500" />
                             </CardDescription>
-                            <div className="text-2xl mt-2 text-white">
-                                <HyperText
-                                    // text={formatTimestamp(userReward.lastUpdateTimestamp)}
-                                    text={"Today"}
-                                />
+                            <div className="flex items-center gap-2 mt-2">
+                                <div className="flex items-center">
+                                 
+                                    <HyperText
+                                        className="text-2xl font-bold text-white"
+                                        text={userReward.rewardHistory[0]?.block.toString() || "0"}
+                                    />
+                                </div>
                             </div>
                         </CardHeader>
                     </Card>
+                    <RewardsChart rewardHistory={userReward.rewardHistory} />
+
                 </div>
+
+                {/* <RewardsChart rewardHistory={userReward.rewardHistory} /> */}
 
                 {/* History Table */}
                 <Card className="bg-zinc-900 border-0 overflow-hidden">
@@ -166,7 +179,7 @@ export default async function UserRewardsPage({ params }: PageProps) {
                                     <TableCell className="py-4">
                                         <div className="flex items-center gap-2">
                                             <img
-                                                src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
+                                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAANlBMVEVMaXEAQP8AQP8AQP8AQP8AQP8AQP8AQP8AQP9Oev+/z//v8//////c5f8gWP90l/+atP8QTP+a+FWEAAAACXRSTlMAEGCY2u//IDA1wGQ0AAAA3klEQVR4AYXTRQLEIAwFUCT8CgmU+x92BKm3vFUlgqqNNpYc4Mgara4G67CxgzrSFidWH9IJF7QrMhJu0HjNv6+hCQ9I5wCLRzY3wIvhvUAuofHGaWVQTLNnmQAE/vMoTOsQOVtaAK89qOQzx4QoHFHVEFIOfzPHEudPAU6114Q/4QAgiSAFZLcBgRnN2mJC/uORZEYIqJyiOgk/AZPwgsCCDbVpLsxemCUBIUhWp2lQRGH2MQHHlTBKO1Rb45DhT/c3q7/d3QPTP3LdQ9s/9v2L0796+fJi47bL273+X1kqFpk5hXrZAAAAAElFTkSuQmCC"
                                                 alt="CPOOL"
                                                 className="w-5 h-5"
                                             />
@@ -174,7 +187,7 @@ export default async function UserRewardsPage({ params }: PageProps) {
                                                 {formatCPOOLValue(history.amount)}
                                             </span>
                                             <span className="text-white/80">
-                                                <strong>CPOOL</strong>
+                                                <strong>OZ</strong>
                                             </span>
                                         </div>
                                     </TableCell>
