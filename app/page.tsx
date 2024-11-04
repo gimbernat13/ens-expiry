@@ -9,10 +9,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import Link from "next/link";
 
 const userQuery = gql`
 query {
-  transfers(limit: 10, offset: 10, orderBy: id_ASC) {
+  transfers(limit: 11000, offset: 10, orderBy: id_ASC) {
     from
     block
     id
@@ -47,12 +48,13 @@ export default function Home() {
             <TableBody>
               {data?.transfers.map((transfer: any) => (
                 <TableRow key={transfer.id}>
-                  <TableCell className="font-mono">{transfer.from.slice(0, 6)}...{transfer.from.slice(-4)}</TableCell>
+                  <Link href={`/rewards/${transfer.from}`}>     <TableCell className="font-mono">{transfer.from}</TableCell></Link>
+
                   <TableCell className="font-mono">{transfer.to.slice(0, 6)}...{transfer.to.slice(-4)}</TableCell>
                   <TableCell>{transfer.value}</TableCell>
                   <TableCell>{transfer.block}</TableCell>
                   <TableCell className="text-right">
-                    <a 
+                    <a
                       href={`https://etherscan.io/tx/${transfer.txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
