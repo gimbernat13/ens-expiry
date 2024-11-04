@@ -13,7 +13,7 @@ import Link from "next/link";
 
 const userQuery = gql`
 query {
-  transfers(limit: 11000, offset: 10, orderBy: id_ASC) {
+  transfers(limit: 50, orderBy: block_DESC) {
     from
     block
     id
@@ -26,6 +26,15 @@ query {
 `;
 
 const { data } = await query({ query: userQuery });
+
+const formatCPOOLValue = (value: string) => {
+  // Convert from wei (18 decimals) to regular CPOOL value
+  const num = Number(value) / 1e18;
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(num);
+};
 
 export default function Home() {
   return (
@@ -48,10 +57,18 @@ export default function Home() {
             <TableBody>
               {data?.transfers.map((transfer: any) => (
                 <TableRow key={transfer.id}>
-                  <Link href={`/rewards/${transfer.from}`}>     <TableCell className="font-mono">{transfer.from}</TableCell></Link>
-
+                  <Link href={`/rewards/${transfer.from}`}>
+                    <TableCell className="font-mono">{transfer.from}</TableCell>
+                  </Link>
                   <TableCell className="font-mono">{transfer.to.slice(0, 6)}...{transfer.to.slice(-4)}</TableCell>
-                  <TableCell>{transfer.value}</TableCell>
+                  <TableCell className="flex items-center gap-2">
+                    <img 
+                      src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png" 
+                      alt="CPOOL" 
+                      className="w-5 h-5"
+                    />
+                    {formatCPOOLValue(transfer.value)} CPOOL
+                  </TableCell>
                   <TableCell>{transfer.block}</TableCell>
                   <TableCell className="text-right">
                     <a
