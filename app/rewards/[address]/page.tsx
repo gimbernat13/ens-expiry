@@ -87,7 +87,7 @@ export default async function UserRewardsPage({ params }: PageProps) {
                                     className="w-8 h-8"
                                 />
                                 <CardTitle className="text-3xl font-bold">
-                                    {formatCPOOLValue(userReward.totalReward)} CPOOL
+                                    {formatCPOOLValue(userReward.totalReward)} RWCPOOL
                                 </CardTitle>
                             </div>
                         </CardHeader>
@@ -104,60 +104,58 @@ export default async function UserRewardsPage({ params }: PageProps) {
                 </div>
 
                 {/* History Table Card */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Transaction History</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Reward Amount</TableHead>
-                                    <TableHead>Block</TableHead>
-                                    <TableHead>Transfer Value</TableHead>
-                                    <TableHead className="text-right">Transaction</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {userReward.rewardHistory.map((history: any, index: number) => (
-                                    <TableRow key={`${history.timestamp}-${index}`}>
-                                        <TableCell className="flex items-center gap-2">
-                                            <img
-                                                src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
-                                                alt="CPOOL"
-                                                className="w-5 h-5"
-                                            />
-                                            {formatCPOOLValue(history.amount)} CPOOL
-                                        </TableCell>
-                                        <TableCell>{history.block}</TableCell>
-                                        <TableCell className="flex items-center gap-2">
-                                            <img
-                                                src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
-                                                alt="CPOOL"
-                                                className="w-5 h-5"
-                                            />
-                                            {history.transfer?.value ? `${formatCPOOLValue(history.transfer.value)} CPOOL` : 'N/A'}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {history.transfer?.txHash ? (
-                                                <a
-                                                    href={`https://etherscan.io/tx/${history.transfer.txHash}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-blue-500 hover:underline font-mono"
-                                                >
-                                                    {history.transfer.txHash.slice(0, 6)}...{history.transfer.txHash.slice(-4)}
-                                                </a>
-                                            ) : (
-                                                'N/A'
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
+
+                <Table className="w-full overflow-hidden rounded-2xl bg-zinc-900">
+                    <TableHeader className="static border-b">
+                        <TableRow>
+                            <TableHead className="text-gray-500 text-sm font-semibold ">Reward Amount</TableHead>
+                            <TableHead className="text-gray-500 text-sm font-semibold ">Block</TableHead>
+                            <TableHead className="text-gray-500 text-sm font-semibold ">Transfer Value</TableHead>
+                            <TableHead className="text-gray-500 text-sm font-semibold  text-right">Transaction</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody className="animate-fadeIn">
+                        {userReward.rewardHistory.map((history: any, index: number) => (
+                            <TableRow
+                                key={`${history.timestamp}-${index}`}
+                                className="text-sm border-b border-b-white/10 transition cursor-pointer hover:bg-white/5 last:border-none"
+                            >
+                                <TableCell className="flex items-center gap-2">
+                                    <img
+                                        src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
+                                        alt="CPOOL"
+                                        className="w-5 h-5"
+                                    />
+                                    {formatCPOOLValue(history.amount)} CPOOL
+                                </TableCell>
+                                <TableCell>{history.block}</TableCell>
+                                <TableCell className="flex items-center gap-2">
+                                    <img
+                                        src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
+                                        alt="CPOOL"
+                                        className="w-5 h-5"
+                                    />
+                                    {history.transfer?.value ? `${formatCPOOLValue(history.transfer.value)} CPOOL` : 'N/A'}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                    {history.transfer?.txHash ? (
+                                        <a
+                                            href={`https://etherscan.io/tx/${history.transfer.txHash}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-500 hover:underline font-mono"
+                                        >
+                                            {history.transfer.txHash.slice(0, 6)}...{history.transfer.txHash.slice(-4)}
+                                        </a>
+                                    ) : (
+                                        'N/A'
+                                    )}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+
             </div>
         </div>
     );
