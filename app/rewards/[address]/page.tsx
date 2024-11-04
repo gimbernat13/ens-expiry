@@ -9,6 +9,8 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import HyperText from "@/components/ui/hyper-text";
+import { ArrowUpRight } from "lucide-react";
 
 const formatCPOOLValue = (value: string) => {
     const num = Number(value) / 1e18;
@@ -65,97 +67,133 @@ export default async function UserRewardsPage({ params }: PageProps) {
     }
 
     return (
-        <div className="min-h-screen p-8">
+        <div className="min-h-screen p-8 bg-zinc-950">
             <div className="max-w-[1200px] mx-auto space-y-6">
                 {/* Title Card */}
-                <Card>
+                <Card className="bg-zinc-900 border-0">
                     <CardHeader>
-                        <CardTitle className="text-2xl">Reward History</CardTitle>
-                        <CardDescription className="font-mono">{params.address}</CardDescription>
+                        <h1 className="text-3xl font-bold text-white">
+                            Reward History
+                        </h1>
+                        <CardDescription className="font-mono text-zinc-400">{params.address}</CardDescription>
                     </CardHeader>
                 </Card>
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="bg-gradient-to-br from-purple-50 to-white dark:from-purple-950/50 dark:to-background">
+                    <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
                         <CardHeader>
-                            <CardDescription>Total Rewards</CardDescription>
+                            <CardDescription className="text-zinc-400 text-sm font-medium">
+                                Total Rewards
+                            </CardDescription>
                             <div className="flex items-center gap-3 mt-2">
                                 <img
                                     src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
                                     alt="CPOOL"
                                     className="w-8 h-8"
                                 />
-                                <CardTitle className="text-3xl font-bold">
-                                    {formatCPOOLValue(userReward.totalReward)} RWCPOOL
-                                </CardTitle>
+                                <div className="flex items-center">
+                                    <HyperText
+                                        className="text-3xl font-bold text-white"
+                                        text={formatCPOOLValue(userReward.totalReward)}
+                                    />
+                                    <span className="text-3xl font-bold text-white/80 ml-2">
+                                        <strong>RWCPOOL</strong>
+                                    </span>
+                                </div>
                             </div>
                         </CardHeader>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/50 dark:to-background">
+                    <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
                         <CardHeader>
-                            <CardDescription>Last Updated</CardDescription>
-                            <CardTitle className="text-2xl mt-2">
-                                {new Date(userReward.lastUpdateTimestamp * 1000).toLocaleString()}
-                            </CardTitle>
+                            <CardDescription className="text-zinc-400 text-sm font-medium">
+                                Last Updated
+                            </CardDescription>
+                            <div className="text-2xl mt-2 text-white">
+                                <HyperText
+                                    text={new Date(userReward.lastUpdateTimestamp * 1000).toLocaleString()}
+                                />
+                            </div>
                         </CardHeader>
                     </Card>
                 </div>
 
-                {/* History Table Card */}
-
-                <Table className="w-full overflow-hidden rounded-2xl bg-zinc-900">
-                    <TableHeader className="static border-b">
-                        <TableRow>
-                            <TableHead className="text-gray-500 text-sm font-semibold ">Reward Amount</TableHead>
-                            <TableHead className="text-gray-500 text-sm font-semibold ">Block</TableHead>
-                            <TableHead className="text-gray-500 text-sm font-semibold ">Transfer Value</TableHead>
-                            <TableHead className="text-gray-500 text-sm font-semibold  text-right">Transaction</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody className="animate-fadeIn">
-                        {userReward.rewardHistory.map((history: any, index: number) => (
-                            <TableRow
-                                key={`${history.timestamp}-${index}`}
-                                className="text-sm border-b border-b-white/10 transition cursor-pointer hover:bg-white/5 last:border-none"
-                            >
-                                <TableCell className="flex items-center gap-2">
-                                    <img
-                                        src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
-                                        alt="CPOOL"
-                                        className="w-5 h-5"
-                                    />
-                                    {formatCPOOLValue(history.amount)} CPOOL
-                                </TableCell>
-                                <TableCell>{history.block}</TableCell>
-                                <TableCell className="flex items-center gap-2">
-                                    <img
-                                        src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
-                                        alt="CPOOL"
-                                        className="w-5 h-5"
-                                    />
-                                    {history.transfer?.value ? `${formatCPOOLValue(history.transfer.value)} CPOOL` : 'N/A'}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    {history.transfer?.txHash ? (
-                                        <a
-                                            href={`https://etherscan.io/tx/${history.transfer.txHash}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-500 hover:underline font-mono"
-                                        >
-                                            {history.transfer.txHash.slice(0, 6)}...{history.transfer.txHash.slice(-4)}
-                                        </a>
-                                    ) : (
-                                        'N/A'
-                                    )}
-                                </TableCell>
+                {/* History Table */}
+                <Card className="bg-zinc-900 border-0 overflow-hidden">
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="border-zinc-800 hover:bg-transparent">
+                                <TableHead className="text-zinc-400 text-xs font-semibold uppercase">
+                                    Reward Amount
+                                </TableHead>
+                                <TableHead className="text-zinc-400 text-xs font-semibold uppercase">
+                                    Block
+                                </TableHead>
+                                <TableHead className="text-zinc-400 text-xs font-semibold uppercase">
+                                    Transfer Value
+                                </TableHead>
+                                <TableHead className="text-zinc-400 text-xs font-semibold uppercase text-right">
+                                    Transaction
+                                </TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-
+                        </TableHeader>
+                        <TableBody>
+                            {userReward.rewardHistory.map((history: any, index: number) => (
+                                <TableRow 
+                                    key={`${history.timestamp}-${index}`}
+                                    className="border-zinc-800 hover:bg-zinc-800/50 transition-colors"
+                                >
+                                    <TableCell className="py-4">
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
+                                                alt="CPOOL"
+                                                className="w-5 h-5"
+                                            />
+                                            <span className="text-white font-medium">
+                                                {formatCPOOLValue(history.amount)}
+                                            </span>
+                                            <span className="text-white/80">
+                                                <strong>CPOOL</strong>
+                                            </span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-white/80 font-medium">
+                                        {history.block}
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
+                                                alt="CPOOL"
+                                                className="w-5 h-5"
+                                            />
+                                            <span className="text-white font-medium">
+                                                {history.transfer?.value ? `${formatCPOOLValue(history.transfer.value)} CPOOL` : 'N/A'}
+                                            </span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="p-4 text-right">
+                                        {history.transfer?.txHash ? (
+                                            <a
+                                                href={`https://etherscan.io/tx/${history.transfer.txHash}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-500 hover:underline font-mono"
+                                            >
+                                                <ArrowUpRight className="w-4 h-4 inline-block mr-1" />
+                                                {history.transfer.txHash.slice(0, 6)}...{history.transfer.txHash.slice(-4)}
+                                            </a>
+                                        ) : (
+                                            'N/A'
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Card>
             </div>
         </div>
     );
