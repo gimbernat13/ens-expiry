@@ -16,7 +16,7 @@ import { ArrowUpRight } from "lucide-react";
 
 const userQuery = gql`
 query {
-  transfers(limit: 50, orderBy: block_DESC) {
+  transfers(limit: 50, orderBy: block_ASC) {
     from
     block
     id
@@ -100,7 +100,7 @@ export default function Home() {
             <CardTitle className="text-xl font-bold text-white">Recent Transfers</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
+            <Table >
               <TableHeader>
                 <TableRow className="border-zinc-800 hover:bg-transparent">
                   <TableHead className="text-zinc-400 text-xs font-semibold uppercase">Borrower</TableHead>
@@ -128,7 +128,7 @@ export default function Home() {
                             className="w-8 h-8 rounded-full"
                           />
                         </div>
-                        <span className="font-medium text-white">
+                        <span className="font-semibold text-white">
                           {transfer.from.slice(0, 6)}...{transfer.from.slice(-4)}
                         </span>
                       </Link>
@@ -137,7 +137,7 @@ export default function Home() {
                       <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center">
                           <img
-                            src="https://ethereum.org/static/6b935ac0e6194247347855dc3d328e83/6ed5f/eth-diamond-black.webp"
+                            src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"
                             alt="ETH"
                             className="w-4 h-4"
                           />

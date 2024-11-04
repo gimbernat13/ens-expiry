@@ -20,6 +20,18 @@ const formatCPOOLValue = (value: string) => {
     }).format(num);
 };
 
+const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    }).format(date);
+};
+
 const userRewardQuery = gql`
   query UserRewardHistory($address: String!) {
     userRewards(where: {user_eq: $address}) {
@@ -75,7 +87,12 @@ export default async function UserRewardsPage({ params }: PageProps) {
                         <h1 className="text-3xl font-bold text-white">
                             Reward History
                         </h1>
-                        <CardDescription className="font-mono text-zinc-400">{params.address}</CardDescription>
+                        <img
+                            src={`https://effigy.im/a/${params.address}.svg`}
+                            alt="Avatar"
+                            className="w-16 h-16 rounded-full"
+                          />
+                        <CardDescription className="font-mono text-2xl text-zinc-400">{params.address}</CardDescription>
                     </CardHeader>
                 </Card>
 
@@ -84,22 +101,23 @@ export default async function UserRewardsPage({ params }: PageProps) {
                     <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
                         <CardHeader>
                             <CardDescription className="text-zinc-400 text-sm font-medium">
-                                Total Rewards
+                                Total Rewards at 5%
                             </CardDescription>
                             <div className="flex items-center gap-3 mt-2">
                                 <img
-                                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAANlBMVEVMaXEAQP8AQP8AQP8AQP8AQP8AQP8AQP8AQP9Oev+/z//v8//////c5f8gWP90l/+atP8QTP+a+FWEAAAACXRSTlMAEGCY2u//IDA1wGQ0AAAA3klEQVR4AYXTRQLEIAwFUCT8CgmU+x92BKm3vFUlgqqNNpYc4Mgara4G67CxgzrSFidWH9IJF7QrMhJu0HjNv6+hCQ9I5wCLRzY3wIvhvUAuofHGaWVQTLNnmQAE/vMoTOsQOVtaAK89qOQzx4QoHFHVEFIOfzPHEudPAU6114Q/4QAgiSAFZLcBgRnN2mJC/uORZEYIqJyiOgk/AZPwgsCCDbVpLsxemCUBIUhWp2lQRGH2MQHHlTBKO1Rb45DhT/c3q7/d3QPTP3LdQ9s/9v2L0796+fJi47bL273+X1kqFpk5hXrZAAAAAElFTkSuQmCC"
                                     alt="CPOOL"
                                     className="w-8 h-8"
                                 />
                                 <div className="flex items-center">
+                                <span className="text-3xl font-bold text-white/80 mr-4">
+                                        <strong>$OZ</strong>
+                                    </span>
                                     <HyperText
                                         className="text-3xl font-bold text-white"
                                         text={formatCPOOLValue(userReward.totalReward)}
                                     />
-                                    <span className="text-3xl font-bold text-white/80 ml-2">
-                                        <strong>RWCPOOL</strong>
-                                    </span>
+                                 
                                 </div>
                             </div>
                         </CardHeader>
@@ -112,7 +130,8 @@ export default async function UserRewardsPage({ params }: PageProps) {
                             </CardDescription>
                             <div className="text-2xl mt-2 text-white">
                                 <HyperText
-                                    text={new Date(userReward.lastUpdateTimestamp * 1000).toLocaleString()}
+                                    // text={formatTimestamp(userReward.lastUpdateTimestamp)}
+                                    text={"Today"}
                                 />
                             </div>
                         </CardHeader>
@@ -140,7 +159,7 @@ export default async function UserRewardsPage({ params }: PageProps) {
                         </TableHeader>
                         <TableBody>
                             {userReward.rewardHistory.map((history: any, index: number) => (
-                                <TableRow 
+                                <TableRow
                                     key={`${history.timestamp}-${index}`}
                                     className="border-zinc-800 hover:bg-zinc-800/50 transition-colors"
                                 >
