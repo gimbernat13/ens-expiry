@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import { Questrial } from 'next/font/google'
 
 import { Montserrat } from 'next/font/google'
 const geistSans = localFont({
@@ -10,8 +11,14 @@ const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
+const questrial = Questrial({ 
+  subsets: ['latin'],
+  weight: "400"
+})
+
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "./fonts/GeistMonoVF.woff", 
   variable: "--font-geist-mono",
   weight: "100 900",
 });
@@ -24,6 +31,8 @@ const montserrat = Montserrat({
   subsets: ['latin'],
   variable: "--font-montserrat",
 })
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={` ${montserrat.variable} antialiased`}
+        className={` ${questrial.className} antialiased`}
       >
          <ThemeProvider
             attribute="class"

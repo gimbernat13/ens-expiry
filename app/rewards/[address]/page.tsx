@@ -13,6 +13,7 @@ import HyperText from "@/components/ui/hyper-text";
 import { ArrowUpRight } from "lucide-react";
 import { Info } from "lucide-react";
 import { RewardsChart } from "@/components/RewardsChart";
+import { UserRewardsBarChart } from "@/components/UserRewardsBarChart";
 
 const formatCPOOLValue = (value: string) => {
     const num = Number(value) / 1e18;
@@ -39,6 +40,8 @@ const userRewardQuery = gql`
     userRewards(where: {user_eq: $address}) {
       totalReward
       lastUpdateTimestamp
+           transactionCount
+        currentTier
       rewardHistory(orderBy: timestamp_DESC) {
         amount
         timestamp
@@ -145,14 +148,9 @@ export default async function UserRewardsPage({ params }: PageProps) {
                             </div>
                         </CardHeader>
                     </Card>
-                    <RewardsChart rewardHistory={userReward.rewardHistory} />
+                    <UserRewardsBarChart rewardHistory={userReward.rewardHistory} />
 
-                </div>
-
-                {/* <RewardsChart rewardHistory={userReward.rewardHistory} /> */}
-
-                {/* History Table */}
-                <Card className="bg-zinc-900 border-0 overflow-hidden">
+                    <Card className="bg-zinc-900 border-0 overflow-hidden">
                     <Table>
                         <TableHeader>
                             <TableRow className="border-zinc-800 hover:bg-transparent">
@@ -226,6 +224,10 @@ export default async function UserRewardsPage({ params }: PageProps) {
                         </TableBody>
                     </Table>
                 </Card>
+
+                </div>
+
+               
             </div>
         </div>
     );
