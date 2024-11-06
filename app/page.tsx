@@ -40,6 +40,17 @@ const formatCPOOLValue = (value: string) => {
   }).format(num);
 };
 
+const formatTimestamp = (blockNumber: number) => {
+  // Ethereum averages 12 seconds per block
+  const secondsAgo = (data?.transfers[0].block - blockNumber) * 12;
+  const minutes = Math.floor(secondsAgo / 60);
+  const hours = Math.floor(minutes / 60);
+  
+  if (hours > 0) return `${hours}h ago`;
+  if (minutes > 0) return `${minutes}m ago`;
+  return 'Just now';
+};
+
 export default function Home() {
   return (
     <div className="min-h-screen p-8 bg-gradient-to-b from-zinc-950 to-black">
@@ -103,6 +114,21 @@ export default function Home() {
                   className="w-6 h-6"
                 />
                 <span className="text-2xl font-bold text-white">OZ Token</span>
+              </div>
+            </CardHeader>
+          </Card>
+
+          {/* Last Indexed Card */}
+          <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
+            <CardHeader>
+              <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
+                Last Indexed
+                <Info className="w-4 h-4" />
+              </CardDescription>
+              <div className="flex items-center gap-2 mt-4">
+                <span className="text-2xl font-bold text-white">
+                  {data?.transfers[0] ? formatTimestamp(data.transfers[0].block) : 'N/A'}
+                </span>
               </div>
             </CardHeader>
           </Card>

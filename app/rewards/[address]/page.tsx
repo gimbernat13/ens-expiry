@@ -57,14 +57,17 @@ const userRewardQuery = gql`
 interface PageProps {
     params: {
         address: string;
-    }
+    },
+    searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-export default async function UserRewardsPage({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
+    const { address } = params;
+
     const { data } = await query({
         query: userRewardQuery,
         variables: {
-            address: params.address
+            address: address
         }
     });
 
@@ -95,14 +98,14 @@ export default async function UserRewardsPage({ params }: PageProps) {
                     <div className="flex items-center px-6 pb-6 gap-4">
                         <div className="w-16 h-16 rounded-full bg-zinc-800/50 p-1.5 flex items-center justify-center overflow-hidden">
                             <img
-                                src={`https://effigy.im/a/${params.address}.svg`}
+                                src={`https://effigy.im/a/${address}.svg`}
                                 alt="Avatar"
                                 className="w-full h-full rounded-full"
                             />
                         </div>
                         <div className="space-y-1">
                             <CardDescription className="font-mono text-2xl text-zinc-400">
-                                {params.address}
+                                {address}
                             </CardDescription>
                             <div className="flex items-center gap-2">
                                 <span className="text-sm px-2 py-1 rounded-full bg-blue-500/10 text-blue-400 font-medium">
