@@ -14,6 +14,7 @@ import { Info } from "lucide-react";
 import HyperText from "@/components/ui/hyper-text";
 import { ArrowUpRight } from "lucide-react";
 
+
 const userQuery = gql`
 query {
   transfers(limit: 500, orderBy: block_DESC) {

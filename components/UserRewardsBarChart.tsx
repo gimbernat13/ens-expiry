@@ -107,12 +107,9 @@ export function UserRewardsBarChart({ rewardHistory }: { rewardHistory: RewardHi
         </div>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none text-white">
-          {percentageChange > 0 ? 'Above' : 'Below'} average by {Math.abs(percentageChange).toFixed(1)}% 
-          <TrendingUp className={`h-4 w-4 ${percentageChange > 0 ? 'text-green-500' : 'text-red-500'}`} />
-        </div>
+   
         <div className="leading-none text-zinc-400">
-          Average reward: {averageReward.toFixed(2)} OZ per block
+          Average reward: {averageReward.toFixed(2)} OZ
         </div>
       </CardFooter>
     </Card>
