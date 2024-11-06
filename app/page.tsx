@@ -64,8 +64,7 @@ export default function Home() {
         {/* Stats Cards Row */}
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-6">
-          {/* Total Rewards Card - Now spans 6 columns */}
-          <Card className="md:col-span-6 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
+          <Card className="md:col-span-4 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
                 Total Rewards Distributed
@@ -74,8 +73,8 @@ export default function Home() {
               <div className="flex items-center gap-2 mt-4">
                 <div className="w-8 h-8 rounded-full bg-zinc-800/50 p-1.5 flex items-center justify-center">
                   <img 
-                    src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png" 
-                    alt="CPOOL" 
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAANlBMVEVMaXEAQP8AQP8AQP8AQP8AQP8AQP8AQP8AQP9Oev+/z//v8//////c5f8gWP90l/+atP8QTP+a+FWEAAAACXRSTlMAEGCY2u//IDA1wGQ0AAAA3klEQVR4AYXTRQLEIAwFUCT8CgmU+x92BKm3vFUlgqqNNpYc4Mgara4G67CxgzrSFidWH9IJF7QrMhJu0HjNv6+hCQ9I5wCLRzY3wIvhvUAuofHGaWVQTLNnmQAE/vMoTOsQOVtaAK89qOQzx4QoHFHVEFIOfzPHEudPAU6114Q/4QAgiSAFZLcBgRnN2mJC/uORZEYIqJyiOgk/AZPwgsCCDbVpLsxemCUBIUhWp2lQRGH2MQHHlTBKO1Rb45DhT/c3q7/d3QPTP3LdQ9s/9v2L0796+fJi47bL273+X1kqFpk5hXrZAAAAAElFTkSuQmCC"
+                  alt="CPOOL" 
                     className="w-full h-full"
                   />
                 </div>
@@ -89,10 +88,10 @@ export default function Home() {
           </Card>
 
           {/* Base Rate Card - Now spans 2 columns */}
-          <Card className="md:col-span-2 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
+          <Card className="md:col-span-3 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
-                Base Reward Rate
+                Base Reward
                 <Info className="w-4 h-4" />
               </CardDescription>
               <div className="flex items-center mt-4">
@@ -105,8 +104,7 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          {/* Reward Token Card - Now spans 2 columns */}
-          <Card className="md:col-span-2 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
+          <Card className="md:col-span-3 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
                 Reward Token
@@ -114,7 +112,7 @@ export default function Home() {
               </CardDescription>
               <div className="flex items-center gap-2 mt-4">
                 <img
-                  src="https://s2.coinmarketcap.com/static/img/coins/64x64/12573.png"
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAANlBMVEVMaXEAQP8AQP8AQP8AQP8AQP8AQP8AQP8AQP9Oev+/z//v8//////c5f8gWP90l/+atP8QTP+a+FWEAAAACXRSTlMAEGCY2u//IDA1wGQ0AAAA3klEQVR4AYXTRQLEIAwFUCT8CgmU+x92BKm3vFUlgqqNNpYc4Mgara4G67CxgzrSFidWH9IJF7QrMhJu0HjNv6+hCQ9I5wCLRzY3wIvhvUAuofHGaWVQTLNnmQAE/vMoTOsQOVtaAK89qOQzx4QoHFHVEFIOfzPHEudPAU6114Q/4QAgiSAFZLcBgRnN2mJC/uORZEYIqJyiOgk/AZPwgsCCDbVpLsxemCUBIUhWp2lQRGH2MQHHlTBKO1Rb45DhT/c3q7/d3QPTP3LdQ9s/9v2L0796+fJi47bL273+X1kqFpk5hXrZAAAAAElFTkSuQmCC"
                   alt="CPOOL"
                   className="w-6 h-6"
                 />
@@ -142,7 +140,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <Card className="lg:col-span-9 bg-zinc-900/50 border-0 backdrop-blur-sm overflow-hidden">
             <CardHeader className="pb-2">
-              <CardTitle className="text-[32px] font-bold text-white">Recent Transfers</CardTitle>
+              <CardTitle className="text-2xl font-bold text-white">Recent Transfers</CardTitle>
             </CardHeader>
             <CardContent className="p-4">
               <div className="border border-zinc-800/50 rounded-lg overflow-hidden">
@@ -255,56 +253,56 @@ export default function Home() {
               <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-[#CD7F32]/10 flex items-center justify-center">
-                    <span className="text-[#CD7F32] font-bold">1×</span>
+                    <span className="text-[#CD7F32] font-bold">1.0×</span>
                   </div>
                   <div>
                     <div className="font-bold text-white">Bronze</div>
                     <div className="text-xs text-zinc-400">0-49 tx</div>
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white">5% </div>
+                <div className="text-sm font-bold text-white">5%</div>
               </div>
 
               {/* Silver Tier */}
               <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-[#C0C0C0]/10 flex items-center justify-center">
-                    <span className="text-[#C0C0C0] font-bold">2×</span>
+                    <span className="text-[#C0C0C0] font-bold">1.5×</span>
                   </div>
                   <div>
                     <div className="font-bold text-white">Silver</div>
                     <div className="text-xs text-zinc-400">50-99 tx</div>
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white">10% </div>
+                <div className="text-sm font-bold text-white">7.5%</div>
               </div>
 
               {/* Gold Tier */}
               <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-[#FFD700]/10 flex items-center justify-center">
-                    <span className="text-[#FFD700] font-bold">4×</span>
+                    <span className="text-[#FFD700] font-bold">2.0×</span>
                   </div>
                   <div>
                     <div className="font-bold text-white">Gold</div>
                     <div className="text-xs text-zinc-400">100-199 tx</div>
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white">20% </div>
+                <div className="text-sm font-bold text-white">10%</div>
               </div>
 
               {/* Platinum Tier */}
               <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-[#E5E4E2]/10 flex items-center justify-center">
-                    <span className="text-[#E5E4E2] font-bold">8×</span>
+                    <span className="text-[#E5E4E2] font-bold">3.0×</span>
                   </div>
                   <div>
                     <div className="font-bold text-white">Platinum</div>
                     <div className="text-xs text-zinc-400">200+ tx</div>
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white">40% </div>
+                <div className="text-sm font-bold text-white">15%</div>
               </div>
             </CardContent>
           </Card>
