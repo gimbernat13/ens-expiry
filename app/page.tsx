@@ -13,7 +13,6 @@ import Link from "next/link";
 import { Info } from "lucide-react";
 import HyperText from "@/components/ui/hyper-text";
 import { ArrowUpRight } from "lucide-react";
-import { TierDisplay } from "./components/TierDisplay";
 
 const userQuery = gql`
 query {
@@ -57,9 +56,9 @@ export default function Home() {
       <div className="max-w-[1200px] mx-auto space-y-6">
         {/* Stats Cards Row */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
-          {/* Total Rewards Card */}
-          <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-6">
+          {/* Total Rewards Card - Now spans 6 columns */}
+          <Card className="md:col-span-6 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
                 Total Rewards Distributed
@@ -77,13 +76,13 @@ export default function Home() {
                   className="text-2xl font-bold text-white"
                   text={formatCPOOLValue(data?.transfers.reduce((acc: number, transfer: any) => acc + Number(transfer.value), 0).toString())}
                 />
-                <span className="text-zinc-400 font-medium">CPOOL</span>
+                <span className="text-zinc-400 font-medium">OZ</span>
               </div>
             </CardHeader>
           </Card>
 
-          {/* Base Rate Card */}
-          <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
+          {/* Base Rate Card - Now spans 2 columns */}
+          <Card className="md:col-span-2 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
                 Base Reward Rate
@@ -99,9 +98,8 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-
-          {/* Reward Token Card */}
-          <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
+          {/* Reward Token Card - Now spans 2 columns */}
+          <Card className="md:col-span-2 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
                 Reward Token
@@ -118,25 +116,23 @@ export default function Home() {
             </CardHeader>
           </Card>
 
-          {/* Last Indexed Card */}
-          <Card className="bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
+          {/* Last Block Card - Now spans 2 columns and simplified content */}
+          <Card className="md:col-span-2 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
-                Last Indexed
+                Last Block
                 <Info className="w-4 h-4" />
               </CardDescription>
               <div className="flex items-center gap-2 mt-4">
                 <span className="text-2xl font-bold text-white">
-                  {data?.transfers[0] ? formatTimestamp(data.transfers[0].block) : 'N/A'}
+                  {data?.transfers[0]?.block || 'N/A'}
                 </span>
               </div>
             </CardHeader>
           </Card>
         </div>
 
-        {/* Replace the separate cards with a grid layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Main Table Card - spans 9 columns */}
           <Card className="lg:col-span-9 bg-zinc-900/50 border-0 backdrop-blur-sm overflow-hidden">
             <CardHeader className="pb-2">
               <CardTitle className="text-[32px] font-bold text-white">Recent Transfers</CardTitle>
@@ -181,7 +177,7 @@ export default function Home() {
                                 className="w-full h-full"
                               />
                             </div>
-                            <span className="font-semibold text-white group-hover:text-blue-400 transition-colors">
+                            <span className="font-semibold text-white group-hover:text-blue-400 transition-colors underline decoration-zinc-700 group-hover:decoration-blue-400">
                               {transfer.from.slice(0, 6)}...{transfer.from.slice(-4)}
                             </span>
                           </Link>
@@ -259,7 +255,7 @@ export default function Home() {
                     <div className="text-xs text-zinc-400">0-49 tx</div>
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white">5% APR</div>
+                <div className="text-sm font-bold text-white">5% </div>
               </div>
 
               {/* Silver Tier */}
@@ -273,7 +269,7 @@ export default function Home() {
                     <div className="text-xs text-zinc-400">50-99 tx</div>
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white">10% APR</div>
+                <div className="text-sm font-bold text-white">10% </div>
               </div>
 
               {/* Gold Tier */}
@@ -287,7 +283,7 @@ export default function Home() {
                     <div className="text-xs text-zinc-400">100-199 tx</div>
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white">20% APR</div>
+                <div className="text-sm font-bold text-white">20% </div>
               </div>
 
               {/* Platinum Tier */}
@@ -301,7 +297,7 @@ export default function Home() {
                     <div className="text-xs text-zinc-400">200+ tx</div>
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white">40% APR</div>
+                <div className="text-sm font-bold text-white">40% </div>
               </div>
             </CardContent>
           </Card>

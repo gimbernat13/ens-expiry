@@ -54,14 +54,12 @@ const userRewardQuery = gql`
   }
 `;
 
-interface PageProps {
-    params: {
-        address: string;
-    },
-    searchParams?: { [key: string]: string | string[] | undefined }
+type AnyProps = {
+  params: any;
+  searchParams?: any;
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params }: AnyProps) {
     const { address } = params;
 
     const { data } = await query({
@@ -169,7 +167,7 @@ export default async function Page({ params }: PageProps) {
                                         {userReward.currentTier === "PLATINUM" && "40"}%
                                     </div>
                                     <span className="text-sm text-zinc-400 font-medium">
-                                        APR (5% × {userReward.currentTier === "BRONZE" && "1×"}
+                                         (5% × {userReward.currentTier === "BRONZE" && "1×"}
                                         {userReward.currentTier === "SILVER" && "2×"}
                                         {userReward.currentTier === "GOLD" && "4×"}
                                         {userReward.currentTier === "PLATINUM" && "8×"})
