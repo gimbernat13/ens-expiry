@@ -13,7 +13,6 @@ import Link from "next/link";
 import { Info } from "lucide-react";
 import HyperText from "@/components/ui/hyper-text";
 import { ArrowUpRight } from "lucide-react";
-import { RewardsChart } from "@/components/RewardsChart";
 import { TierDisplay } from "./components/TierDisplay";
 
 const userQuery = gql`
@@ -57,7 +56,13 @@ export default function Home() {
               <div className="mt-4">
                 <TierDisplay currentTxCount={75} currentTier="SILVER" />
               </div>
-           
+              <div className="flex items-center mt-4">
+                <HyperText
+                  className="text-2xl font-bold text-white"
+                  text="5"
+                />
+                <span className="text-2xl text-white/80 ml-1">%</span>
+              </div>
             </CardHeader>
           </Card>
 
@@ -101,7 +106,7 @@ export default function Home() {
           <CardHeader className="pb-2">
             <CardTitle className="text-[32px] font-bold text-white">Recent Transfers</CardTitle>
           </CardHeader>
-          <CardContent className="p-8">
+          <CardContent className="p-4">
             <div className="border border-zinc-800/50 rounded-lg overflow-hidden">
               <Table>
                 <TableHeader>
@@ -129,7 +134,7 @@ export default function Home() {
                       key={transfer.id}
                       className="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors"
                     >
-                      <TableCell className="py-2">
+                      <TableCell className="py-4">
                         <Link 
                           href={`/rewards/${transfer.from}`}
                           className="group flex items-center gap-3 -ml-1 px-3 py-1.5 rounded-md transition-colors hover:bg-white/5"
