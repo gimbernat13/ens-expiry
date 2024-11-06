@@ -105,7 +105,12 @@ export default async function Page({ params }: AnyProps) {
                                 {address}
                             </CardDescription>
                             <div className="flex items-center gap-2">
-                                <span className="text-sm px-2 py-1 rounded-full bg-blue-500/10 text-blue-400 font-medium">
+                                <span className={`text-sm px-2 py-1 rounded-full font-medium
+                                    ${userReward.currentTier === "BRONZE" ? "bg-amber-950/30 text-amber-500" : ""}
+                                    ${userReward.currentTier === "SILVER" ? "bg-zinc-300/10 text-zinc-300" : ""}
+                                    ${userReward.currentTier === "GOLD" ? "bg-yellow-500/10 text-yellow-500" : ""}
+                                    ${userReward.currentTier === "PLATINUM" ? "bg-cyan-500/10 text-cyan-400" : ""}
+                                `}>
                                     {userReward.currentTier || "BRONZE"}
                                 </span>
                                 <span className="text-sm px-2 py-1 rounded-full bg-zinc-800 text-zinc-400 font-medium">
