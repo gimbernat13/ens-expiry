@@ -28,7 +28,10 @@ query {
 
 `;
 
-const { data } = await query({ query: userQuery });
+const { data } = await query({
+  query: userQuery,
+  pollInterval: 30000, // Poll every 30 seconds
+});
 
 const formatCPOOLValue = (value: string) => {
   // Convert from wei (18 decimals) to regular CPOOL value
@@ -136,6 +139,9 @@ export default function Home() {
           <Card className="lg:col-span-9 bg-zinc-900/50 border-0 backdrop-blur-sm overflow-hidden">
             <CardHeader className="pb-2">
               <CardTitle className="text-[32px] font-bold text-white">Recent Transfers</CardTitle>
+              <CardDescription className="text-zinc-400">
+                Data automatically refreshes every 30 seconds
+              </CardDescription>
             </CardHeader>
             <CardContent className="p-4">
               <div className="border border-zinc-800/50 rounded-lg overflow-hidden">
