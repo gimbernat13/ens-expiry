@@ -86,7 +86,6 @@ export default async function Page({ params }: AnyProps) {
     return (
         <div className="min-h-screen p-8 bg-gradient-to-b from-zinc-950 to-black">
             <div className="max-w-[1200px] mx-auto space-y-6">
-                {/* Title Card */}
                 <Card className="bg-zinc-900/50 border-0 backdrop-blur-sm">
                     <CardHeader>
                         <h1 className="text-3xl font-bold text-white">
@@ -291,10 +290,7 @@ export default async function Page({ params }: AnyProps) {
                         </Table>
                     </Card>
                 </div>
-
-            </div>
-
-           
+            </div>        
         </div>
     );
 }

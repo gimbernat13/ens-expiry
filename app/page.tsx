@@ -38,7 +38,6 @@ const { data } = await query({
 });
 
 const formatCPOOLValue = (value: string) => {
-  // Convert from wei (18 decimals) to regular CPOOL value
   const num = Number(value) / 1e18;
   return new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
@@ -46,22 +45,11 @@ const formatCPOOLValue = (value: string) => {
   }).format(num);
 };
 
-const formatTimestamp = (blockNumber: number) => {
-  // Ethereum averages 12 seconds per block
-  const secondsAgo = (data?.transfers[0].block - blockNumber) * 12;
-  const minutes = Math.floor(secondsAgo / 60);
-  const hours = Math.floor(minutes / 60);
-  
-  if (hours > 0) return `${hours}h ago`;
-  if (minutes > 0) return `${minutes}m ago`;
-  return 'Just now';
-};
 
 export default function Home() {
   return (
     <div className="min-h-screen p-8 bg-gradient-to-b from-zinc-950 to-black">
       <div className="max-w-[1200px] mx-auto space-y-6">
-        {/* Stats Cards Row */}
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-6">
           <Card className="md:col-span-4 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
@@ -120,8 +108,6 @@ export default function Home() {
               </div>
             </CardHeader>
           </Card>
-
-          {/* Last Block Card - Now spans 2 columns and simplified content */}
           <Card className="md:col-span-2 bg-zinc-900 border-0 hover:bg-zinc-800/50 transition-colors">
             <CardHeader>
               <CardDescription className="text-zinc-400 text-sm font-medium flex items-center gap-2">
@@ -240,7 +226,6 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          {/* Tiers Card - spans 3 columns */}
           <Card className="lg:col-span-3 bg-zinc-900 border-0">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-white">Reward Tiers</CardTitle>
