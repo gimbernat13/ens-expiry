@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Globe2 } from "lucide-react";
 import { DomainExpiryCards } from "./components/DomainExpiryCards";
+import { DomainSearch } from "./components/DomainSearch";
 
 const userQuery = gql`
   query GetExpiringDomains($currentTime: BigInt!, $endTime: BigInt!, $first: Int!, $skip: Int!) {
@@ -51,7 +52,14 @@ export default async function Home() {
     <div className="min-h-screen p-8 bg-gradient-to-b from-zinc-950 to-black">
       <div className="max-w-[1200px] mx-auto space-y-6">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-white">Available ENS Domains</h1>
+          <h1 className="text-3xl font-bold text-white">ENS Domain Explorer</h1>
+          <p className="text-zinc-400">Search domains or view upcoming expirations</p>
+        </div>
+
+        <DomainSearch />
+        
+        <div className="space-y-2">
+          <h2 className="text-xl font-bold text-white">Upcoming Expirations</h2>
           <p className="text-zinc-400">Domains becoming available in the next 30 days</p>
         </div>
 
