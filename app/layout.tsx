@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={` ${questrial.className} antialiased`}
+        className={` ${montserrat.className} antialiased`}
       >
       
         {children}

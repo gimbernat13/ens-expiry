@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Clock, Globe2 } from "lucide-react";
 import { DomainExpiryCards } from "./components/DomainExpiryCards";
 import { DomainSearch } from "./components/DomainSearch";
+import { DomainTabs } from "./components/DomainTabs";
 
 const userQuery = gql`
   query GetExpiringDomains($currentTime: BigInt!, $endTime: BigInt!, $first: Int!, $skip: Int!) {
@@ -29,24 +30,62 @@ const userQuery = gql`
   }
 `;
 
+const expiredDomainsQuery = gql`
+  query GetExpiredDomains($currentTime: BigInt!, $first: Int!, $skip: Int!) {
+    registrations(
+      first: $first
+      skip: $skip
+      orderBy: expiryDate
+      orderDirection: desc
+      where: { 
+        expiryDate_lt: $currentTime
+      }
+    ) {
+      id
+      domain {
+        name
+      }
+      expiryDate
+      registrant {
+        id
+      }
+    }
+  }
+`;
+
 export default async function Home() {
   const currentTime = Math.floor(Date.now() / 1000);
   const gracePeriod = 90 * 24 * 60 * 60; // 90 days in seconds
   
-  const { data } = await query({ 
-    query: userQuery,
-    variables: {
-      currentTime: currentTime - gracePeriod, // Look for domains whose grace period is ending
-      endTime: currentTime - gracePeriod + (30 * 24 * 60 * 60), // 30 days window
-      first: 500,
-      skip: 0
-    },
-    context: {
-      fetchOptions: {
-        next: { revalidate: 30 }
+  const [upcomingDomains, expiredDomains] = await Promise.all([
+    query({ 
+      query: userQuery,
+      variables: {
+        currentTime: currentTime - gracePeriod,
+        endTime: currentTime - gracePeriod + (30 * 24 * 60 * 60),
+        first: 500,
+        skip: 0
+      },
+      context: {
+        fetchOptions: {
+          next: { revalidate: 30 }
+        }
       }
-    }
-  });
+    }),
+    query({
+      query: expiredDomainsQuery,
+      variables: {
+        currentTime: currentTime - gracePeriod,
+        first: 500,
+        skip: 0
+      },
+      context: {
+        fetchOptions: {
+          next: { revalidate: 30 }
+        }
+      }
+    })
+  ]);
 
   return (
     <div className="min-h-screen p-8 bg-gradient-to-b from-zinc-950 to-black">
@@ -58,12 +97,10 @@ export default async function Home() {
 
         <DomainSearch />
         
-        <div className="space-y-2">
-          <h2 className="text-xl font-bold text-white">Upcoming Expirations</h2>
-          <p className="text-zinc-400">Domains becoming available in the next 30 days</p>
-        </div>
-
-        <DomainExpiryCards registrations={data?.registrations || []} />
+        <DomainTabs 
+          upcomingRegistrations={upcomingDomains.data?.registrations || []}
+          expiredRegistrations={expiredDomains.data?.registrations || []}
+        />
       </div>
     </div>
   );
