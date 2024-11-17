@@ -1,65 +1,36 @@
+'use client';
+
+import { useState } from 'react';
 import { DomainSearchForm } from "./DomainSearchForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { gql } from '@apollo/client';
-import { query } from "@/apollo-client";
-import { DomainExpiryCard } from "./DomainExpiryCard";
 
-const searchDomainQuery = gql`
-  query SearchDomain($name: String!) {
-    domains(where: { name: $name }) {
-      id
-      name
-      registration {
-        id
-        expiryDate
-        registrant {
-          id
+export function DomainSearch() {
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = async (query: string) => {
+    console.log('Handling search for:', query);
+    setSearchQuery(query);
+    setIsSearching(true);
+
+    try {
+      // Simple test data for now
+      const testResults = [
+        {
+          name: query,
+          isRegistered: Math.random() > 0.5,
         }
-      }
+      ];
+      
+      setSearchResults(testResults);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
     }
-  }
-`;
-
-interface SearchProps {
-  searchParams?: {
-    q?: string;
   };
-}
-
-export async function DomainSearch({ searchParams = {} }: SearchProps) {
-  let searchResult = null;
-  let notFound = false;
-  
-  const searchQuery = searchParams?.q?.toLowerCase();
-  
-  if (searchQuery && typeof searchQuery === 'string') {
-    const { data } = await query({
-      query: searchDomainQuery,
-      variables: {
-        name: searchQuery,
-      },
-      context: {
-        fetchOptions: {
-          next: { revalidate: 30 }
-        }
-      }
-    });
-    
-    if (data?.domains?.[0]) {
-      searchResult = {
-        id: data.domains[0].registration?.id || 'not-registered',
-        domain: {
-          name: data.domains[0].name
-        },
-        expiryDate: data.domains[0].registration?.expiryDate || '0',
-        registrant: {
-          id: data.domains[0].registration?.registrant?.id || 'none'
-        }
-      };
-    } else {
-      notFound = true;
-    }
-  }
 
   return (
     <Card className="bg-zinc-900/50 border-0 backdrop-blur-sm">
@@ -68,36 +39,50 @@ export async function DomainSearch({ searchParams = {} }: SearchProps) {
         <CardDescription>Enter a domain name to check its availability</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <DomainSearchForm initialQuery={searchParams?.q} />
+        <DomainSearchForm onSearch={handleSearch} />
         
-        {searchResult && (
-          <DomainExpiryCard
-            domain={searchResult.domain.name}
-            expiryDate={Number(searchResult.expiryDate)}
-            registrant={searchResult.registrant.id}
-          />
+        {isSearching && (
+          <div className="text-center p-4">
+            <p className="text-zinc-400">Searching...</p>
+          </div>
         )}
-
-        {notFound && searchQuery && (
-          <Card className="bg-blue-900/20 border-blue-500/20 border">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-white font-mono">{searchQuery}.eth</h3>
-                  <p className="text-sm text-blue-400">Available for registration!</p>
-                </div>
-                <a
-                  href={`https://app.ens.domains/${searchQuery}.eth`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium 
-                           hover:bg-blue-400 transition-colors"
-                >
-                  Register →
-                </a>
+        
+        {searchQuery && !isSearching && (
+          <div className="mt-4 space-y-2">
+            {searchResults.length > 0 ? (
+              <ul className="space-y-2">
+                {searchResults.map((result, index) => (
+                  <li 
+                    key={index}
+                    className="p-3 rounded-lg bg-zinc-800/50 flex items-center justify-between"
+                  >
+                    <div>
+                      <span className="text-white font-mono">{result.name}.eth</span>
+                      <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
+                        result.isRegistered 
+                          ? 'bg-yellow-500/20 text-yellow-400' 
+                          : 'bg-green-500/20 text-green-400'
+                      }`}>
+                        {result.isRegistered ? 'Registered' : 'Available'}
+                      </span>
+                    </div>
+                    <a
+                      href={`https://app.ens.domains/${result.name}.eth`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 text-sm"
+                    >
+                      View →
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-center p-4 bg-zinc-800/50 rounded-lg">
+                <p className="text-zinc-400">No results found for "{searchQuery}"</p>
               </div>
-            </CardContent>
-          </Card>
+            )}
+          </div>
         )}
       </CardContent>
     </Card>
