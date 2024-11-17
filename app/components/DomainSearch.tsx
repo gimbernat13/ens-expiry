@@ -3,9 +3,17 @@
 import { useState } from 'react';
 import { DomainSearchForm } from "./DomainSearchForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar, Clock } from "lucide-react";
+
+interface SearchResult {
+  name: string;
+  isRegistered: boolean;
+  expiryDate?: number;
+  gracePeriodEnd?: number;
+}
 
 export function DomainSearch() {
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -15,13 +23,17 @@ export function DomainSearch() {
     setIsSearching(true);
 
     try {
-      // Simple test data for now
-      const testResults = [
-        {
-          name: query,
-          isRegistered: Math.random() > 0.5,
-        }
-      ];
+      // Mock data with consistent registration status and dates
+      const currentTime = Math.floor(Date.now() / 1000);
+      const mockExpiryDate = currentTime + (90 * 24 * 60 * 60); // 90 days from now
+      const mockGracePeriod = mockExpiryDate + (90 * 24 * 60 * 60); // 90 days grace period
+
+      const testResults = [{
+        name: query,
+        isRegistered: query.length < 5, // Just for demo: domains < 5 chars are "registered"
+        expiryDate: mockExpiryDate,
+        gracePeriodEnd: mockGracePeriod
+      }];
       
       setSearchResults(testResults);
     } catch (error) {
@@ -30,6 +42,22 @@ export function DomainSearch() {
     } finally {
       setIsSearching(false);
     }
+  };
+
+  const formatDate = (timestamp: number) => {
+    return new Date(timestamp * 1000).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const handleAddToCalendar = (date: number, domain: string) => {
+    // Mock function - would actually create a calendar event
+    const eventDate = new Date(date * 1000);
+    alert(`Added reminder for ${domain}.eth on ${eventDate.toLocaleDateString()}`);
   };
 
   return (
@@ -54,26 +82,62 @@ export function DomainSearch() {
                 {searchResults.map((result, index) => (
                   <li 
                     key={index}
-                    className="p-3 rounded-lg bg-zinc-800/50 flex items-center justify-between"
+                    className="p-4 rounded-lg bg-zinc-800/50 space-y-3"
                   >
-                    <div>
-                      <span className="text-white font-mono">{result.name}.eth</span>
-                      <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
-                        result.isRegistered 
-                          ? 'bg-yellow-500/20 text-yellow-400' 
-                          : 'bg-green-500/20 text-green-400'
-                      }`}>
-                        {result.isRegistered ? 'Registered' : 'Available'}
-                      </span>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-white font-mono">{result.name}.eth</span>
+                        <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
+                          result.isRegistered 
+                            ? 'bg-yellow-500/20 text-yellow-400' 
+                            : 'bg-green-500/20 text-green-400'
+                        }`}>
+                          {result.isRegistered ? 'Registered' : 'Available'}
+                        </span>
+                      </div>
+                      <a
+                        href={`https://app.ens.domains/${result.name}.eth`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:text-blue-300 text-sm"
+                      >
+                        View →
+                      </a>
                     </div>
-                    <a
-                      href={`https://app.ens.domains/${result.name}.eth`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 text-sm"
-                    >
-                      View →
-                    </a>
+
+                    {result.isRegistered && result.expiryDate && (
+                      <div className="space-y-2 border-t border-zinc-700/50 pt-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-2 text-zinc-400">
+                            <Clock className="w-4 h-4" />
+                            <span>Expires: {formatDate(result.expiryDate)}</span>
+                          </div>
+                          <button
+                            onClick={() => handleAddToCalendar(result.expiryDate!, result.name)}
+                            className="px-3 py-1.5 bg-zinc-700/50 hover:bg-zinc-700 
+                                     text-zinc-300 rounded-lg text-xs flex items-center gap-2"
+                          >
+                            <Calendar className="w-3 h-3" />
+                            Add Reminder
+                          </button>
+                        </div>
+                        
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-2 text-zinc-400">
+                            <Clock className="w-4 h-4" />
+                            <span>Grace Period Ends: {formatDate(result.gracePeriodEnd!)}</span>
+                          </div>
+                          <button
+                            onClick={() => handleAddToCalendar(result.gracePeriodEnd!, result.name)}
+                            className="px-3 py-1.5 bg-zinc-700/50 hover:bg-zinc-700 
+                                     text-zinc-300 rounded-lg text-xs flex items-center gap-2"
+                          >
+                            <Calendar className="w-3 h-3" />
+                            Add Reminder
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
