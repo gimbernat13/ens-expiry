@@ -6,6 +6,7 @@ import { DomainSearchForm } from './DomainSearchForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, Clock } from 'lucide-react';
 import { searchDomain } from '../actions/searchDomain';
+import { generateGoogleCalendarUrl } from '../lib/calendar';
 
 export function DomainSearch() {
   const [searchResult, setSearchResult] = useState<any>(null);
@@ -87,16 +88,18 @@ export function DomainSearch() {
                           Expires: {formatDate(Number(searchResult.registration.expiryDate))}
                         </span>
                       </div>
-                      {/* Define handleAddToCalendar or remove the button if not needed */}
-                      {/* <button
-                        onClick={() =>
-                          handleAddToCalendar(searchResult.registration.expiryDate, searchQuery)
-                        }
-                        className="px-3 py-1.5 bg-zinc-700/50 hover:bg-zinc-700 text-zinc-300 rounded-lg text-xs flex items-center gap-2"
+                      <a
+                        href={generateGoogleCalendarUrl(
+                          searchResult.name,
+                          Number(searchResult.registration.expiryDate)
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1.5 bg-zinc-700/50 hover:bg-zinc-700 text-zinc-300 rounded-lg text-xs flex items-center gap-2 transition-colors"
                       >
                         <Calendar className="w-3 h-3" />
-                        Add Reminder
-                      </button> */}
+                        Add to Calendar
+                      </a>
                     </div>
                   </div>
                 )}
