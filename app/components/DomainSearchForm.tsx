@@ -1,8 +1,9 @@
+// components/DomainSearchForm.tsx
 'use client';
 
 import { useRef } from 'react';
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 interface DomainSearchFormProps {
   onSearch: (query: string) => void;
@@ -13,11 +14,11 @@ export function DomainSearchForm({ onSearch }: DomainSearchFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const query = searchRef.current?.value.trim();
+    const query = searchRef.current?.value.trim().toLowerCase();
     console.log('Form submitted with query:', query);
 
     if (query) {
-      onSearch(query.toLowerCase().replace('.eth', ''));
+      onSearch(query);
     }
   };
 
@@ -27,11 +28,11 @@ export function DomainSearchForm({ onSearch }: DomainSearchFormProps) {
         <Input
           ref={searchRef}
           type="text"
-          placeholder="Search for a domain (e.g. vitalik)"
+          placeholder="Search for a domain (e.g. vitalik.eth)"
           className="bg-zinc-800/50 border-zinc-700 text-white pl-10"
         />
         <Search className="w-4 h-4 absolute left-3 top-3 text-zinc-400" />
       </div>
     </form>
   );
-} 
+}
