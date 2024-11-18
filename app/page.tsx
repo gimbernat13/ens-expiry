@@ -5,6 +5,7 @@ import { Clock, Globe2 } from "lucide-react";
 import { DomainExpiryCards } from "./components/DomainExpiryCards";
 import { DomainSearch } from "./components/DomainSearch";
 import { DomainTabs } from "./components/DomainTabs";
+import { TopRegistrants } from "./components/TopRegistrants";
 
 const userQuery = gql`
   query GetExpiringDomains($currentTime: BigInt!, $endTime: BigInt!, $first: Int!, $skip: Int!) {
@@ -96,11 +97,12 @@ export default async function Home() {
         </div>
 
         <DomainSearch />
-        
+        <TopRegistrants />
         <DomainTabs 
           upcomingRegistrations={upcomingDomains.data?.registrations || []}
           expiredRegistrations={expiredDomains.data?.registrations || []}
         />
+
       </div>
     </div>
   );
