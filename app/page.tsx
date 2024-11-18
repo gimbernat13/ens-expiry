@@ -1,11 +1,9 @@
 import { query } from "@/apollo-client";
 import { gql } from '@apollo/client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Clock, Globe2 } from "lucide-react";
-import { DomainExpiryCards } from "./components/DomainExpiryCards";
+
 import { DomainSearch } from "./components/DomainSearch";
-import { DomainTabs } from "./components/DomainTabs";
 import { TopRegistrants } from "./components/TopRegistrants";
+import { DomainTabs } from "./components/DomainTabs";
 
 const userQuery = gql`
   query GetExpiringDomains($currentTime: BigInt!, $endTime: BigInt!, $first: Int!, $skip: Int!) {
@@ -54,9 +52,12 @@ const expiredDomainsQuery = gql`
   }
 `;
 
+const INITIAL_ITEMS = 20;
+const ITEMS_PER_LOAD = 20;
+
 export default async function Home() {
   const currentTime = Math.floor(Date.now() / 1000);
-  const gracePeriod = 90 * 24 * 60 * 60; // 90 days in seconds
+  const gracePeriod = 90 * 24 * 60 * 60;
   
   const [upcomingDomains, expiredDomains] = await Promise.all([
     query({ 
@@ -64,7 +65,7 @@ export default async function Home() {
       variables: {
         currentTime: currentTime - gracePeriod,
         endTime: currentTime - gracePeriod + (30 * 24 * 60 * 60),
-        first: 500,
+        first: 100,
         skip: 0
       },
       context: {
@@ -77,7 +78,7 @@ export default async function Home() {
       query: expiredDomainsQuery,
       variables: {
         currentTime: currentTime - gracePeriod,
-        first: 500,
+        first: 100,
         skip: 0
       },
       context: {
@@ -101,6 +102,8 @@ export default async function Home() {
         <DomainTabs 
           upcomingRegistrations={upcomingDomains.data?.registrations || []}
           expiredRegistrations={expiredDomains.data?.registrations || []}
+          initialItemsToShow={INITIAL_ITEMS}
+          itemsPerLoad={ITEMS_PER_LOAD}
         />
 
       </div>

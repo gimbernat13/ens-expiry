@@ -42,10 +42,9 @@ export async function TopRegistrants() {
     }
   });
 
-  // Sort accounts by number of registrations
   const sortedAccounts = [...(data?.accounts || [])]
     .sort((a, b) => b.registrations.length - a.registrations.length)
-    .slice(0, 10); // Take top 10
+    .slice(0, 10); 
 
   return (
     <div className="space-y-6">

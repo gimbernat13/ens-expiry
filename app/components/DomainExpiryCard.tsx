@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Clock, User, Calendar } from "lucide-react";
+import { Check, Clock, User, Calendar, ExternalLink } from "lucide-react";
 import { formatDistanceToNow, format } from 'date-fns';
 
 interface DomainExpiryCardProps {
@@ -68,9 +68,34 @@ export function DomainExpiryCard({ domain, expiryDate, registrant, isExpired }: 
     const now = Math.floor(Date.now() / 1000);
     const gracePeriodEnd = expiryDate + gracePeriod;
     
-    if (now > gracePeriodEnd) return 'Grace Period Ended';
+    if (now > gracePeriodEnd) return 'Available';
     if (now > expiryDate) return 'In Grace Period';
     return 'Active';
+  };
+
+  const getTimeLeftString = () => {
+    if (timeLeft.days > 0) return `${timeLeft.days}d`;
+    if (timeLeft.hours > 0) return `${timeLeft.hours}h`;
+    if (timeLeft.minutes > 0) return `${timeLeft.minutes}m`;
+    return `${timeLeft.seconds}s`;
+  };
+
+  const getBadgeContent = () => {
+    if (isAvailable) return {
+      text: 'Available',
+      className: 'bg-green-500/20 text-green-400'
+    };
+    
+    const timeLeft = getTimeLeftString();
+    if (getExpiryStatus() === 'In Grace Period') return {
+      text: `Grace Period · ${timeLeft}`,
+      className: 'bg-yellow-500/20 text-yellow-400'
+    };
+    
+    return {
+      text: `Active · ${timeLeft}`,
+      className: 'bg-blue-500/20 text-blue-400'
+    };
   };
 
   return (
@@ -80,136 +105,58 @@ export function DomainExpiryCard({ domain, expiryDate, registrant, isExpired }: 
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className={`
-        bg-zinc-900/50 border-0 backdrop-blur-sm overflow-hidden group 
-        transition-all duration-500 ease-out
-        ${isAvailable ? 'bg-green-900/20 border-green-500/20 border' : 'hover:bg-zinc-900/70'}
-        ${isExpired ? 'border border-red-500/20' : ''}
-      `}>
-        <a 
-          href={`https://app.ens.domains/${domain}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
-          <CardHeader>
-            <div className="flex items-center justify-between">
+      <Card className="bg-zinc-900/50 border-0 backdrop-blur-sm overflow-hidden group 
+                     transition-all duration-500 ease-out hover:bg-zinc-900/70">
+        <a href={`https://app.ens.domains/${domain}`} target="_blank" rel="noopener noreferrer" 
+           className="block relative p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <CardTitle className="font-mono text-lg text-white group-hover:text-blue-400 transition-colors">
                 {domain}
               </CardTitle>
-              <AnimatePresence>
-                {isAvailable ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/20 text-green-400"
-                  >
-                    <Check className="w-4 h-4" />
-                    <span className="text-xs font-medium">Available Now</span>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    className={`flex items-center gap-2 px-3 py-1 rounded-full 
-                      ${isExpired ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'}`}
-                  >
-                    <Clock className="w-4 h-4" />
-                    <span className="text-xs font-medium">{getExpiryStatus()}</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <ExternalLink className="w-4 h-4" />
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full 
+                ${getBadgeContent().className} transition-colors duration-300`}
+            >
+              <Clock className="w-3 h-3" />
+              <span className="text-xs font-medium whitespace-nowrap">
+                {getBadgeContent().text}
+              </span>
+            </motion.div>
+          </div>
+          
+          <div className="mt-2 flex items-center gap-4 text-xs text-zinc-400">
+            <div className="flex items-center gap-1.5">
+              <User className="w-3 h-3" />
+              <span className="font-mono">
+                <a 
+                  href={`https://etherscan.io/address/${registrant}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-400 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {truncateAddress(registrant)}
+                </a>
+              </span>
             </div>
             
-            <div className="mt-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-zinc-400">
-                <User className="w-4 h-4" />
-                <span className="font-mono">
-                  <a 
-                    href={`https://etherscan.io/address/${registrant}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-blue-400 transition-colors"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {truncateAddress(registrant)}
-                  </a>
-                </span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm text-zinc-400">
-                <Calendar className="w-4 h-4" />
-                <div className="space-x-1">
-                  <span>Expired:</span>
-                  <span className="font-mono">{formatDate(expiryDate)}</span>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm text-zinc-400">
-                <Clock className="w-4 h-4" />
-                <div className="space-x-1">
-                  <span>Grace Period Ends:</span>
-                  <span className="font-mono">{formatDate(expiryDate + gracePeriod)}</span>
-                </div>
-              </div>
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-3 h-3" />
+              <span className="font-mono">{formatDate(expiryDate + gracePeriod)}</span>
             </div>
-          </CardHeader>
-
-          <CardContent>
-            <AnimatePresence mode="wait">
-              {isAvailable ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="flex items-center justify-center p-4"
-                >
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-6 py-3 bg-green-500 text-white rounded-lg font-medium shadow-lg 
-                             shadow-green-500/20 hover:bg-green-400 transition-colors"
-                  >
-                    Register Now
-                  </motion.button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="grid grid-cols-4 gap-4 text-center"
-                >
-                  <div className="space-y-2">
-                    <div className={`text-2xl font-bold ${getStatusColor(timeLeft.days, isExpired)}`}>
-                      {timeLeft.days.toString().padStart(2, '0')}
-                    </div>
-                    <div className="text-xs text-zinc-500 uppercase tracking-wider">Days</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-2xl font-bold text-white">
-                      {timeLeft.hours.toString().padStart(2, '0')}
-                    </div>
-                    <div className="text-xs text-zinc-500 uppercase tracking-wider">Hours</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-2xl font-bold text-white">
-                      {timeLeft.minutes.toString().padStart(2, '0')}
-                    </div>
-                    <div className="text-xs text-zinc-500 uppercase tracking-wider">Minutes</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-2xl font-bold text-white">
-                      {timeLeft.seconds.toString().padStart(2, '0')}
-                    </div>
-                    <div className="text-xs text-zinc-500 uppercase tracking-wider">Seconds</div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </CardContent>
+          </div>
         </a>
       </Card>
     </motion.div>
