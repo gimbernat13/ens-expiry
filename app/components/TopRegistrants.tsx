@@ -1,3 +1,5 @@
+
+
 import { query } from "@/apollo-client";
 import { gql } from '@apollo/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -93,7 +95,7 @@ export async function TopRegistrants() {
               <div className="space-y-2">
                 <div className="text-sm text-zinc-400 font-medium">Recent Domains</div>
                 <div className="space-y-1.5">
-                  {account.registrations.slice(0, 5).map((registration) => (
+                  {account.registrations.slice(0, 5).map((registration: any) => (
                     <div 
                       key={registration.id}
                       className="flex items-center gap-2 text-sm text-zinc-300 font-mono"
