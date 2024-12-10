@@ -104,6 +104,7 @@ export default async function Home() {
           initialItemsToShow={INITIAL_ITEMS}
           itemsPerLoad={ITEMS_PER_LOAD}
         />
+        
 
       </div>
     </div>
