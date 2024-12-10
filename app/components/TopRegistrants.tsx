@@ -90,6 +90,7 @@ export async function TopRegistrants() {
                 </div>
                 <div className="text-2xl font-bold text-zinc-500">#{index + 1}</div>
               </div>
+              
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
