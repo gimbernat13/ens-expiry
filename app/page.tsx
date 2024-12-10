@@ -98,7 +98,7 @@ export default async function Home() {
         </div>
 
         <DomainSearch />
-        <TopRegistrants />
+        {/* <TopRegistrants /> */}
         <DomainTabs 
           upcomingRegistrations={upcomingDomains.data?.registrations || []}
           expiredRegistrations={expiredDomains.data?.registrations || []}
